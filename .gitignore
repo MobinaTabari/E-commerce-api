@@ -1,0 +1,17 @@
+node_modules/
+
+# Environment variables
+.env
+
+# Prisma generated client
+/prisma/generated
+
+# SQLite database
+/prisma/*.db
+/prisma/*.db-journal
+
+# Prisma AI/Agent skills
+.agents/
+.claude/
+.windsurf/
+skills-lock.json
