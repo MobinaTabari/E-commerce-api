@@ -1,6 +1,8 @@
 import express from "express";
 import dotenv from "dotenv";
+import authRouter from "./routes/auth.routes.js";
 import { prisma } from "./utils/prisma.util.js";
+import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 
 dotenv.config();
 
@@ -10,13 +12,11 @@ const port = process.env.PORT;
 
 app.use(express.json());
 
-app.get("/api/test", (req, res) => {
-    res.send("API is working");
-});
+app.use("/api/auth", authRouter);
 
-app.post("/api/test", (req,res) => {
-    res.send(req.body);
-});
+app.use("/api/auth", authRouter);
+
+app.use(errorHandler)
 
 app.listen(port, () => {
     console.log(`server is running on PORT ${port}`);
