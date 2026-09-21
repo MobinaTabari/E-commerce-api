@@ -6,7 +6,7 @@ import { createCategory, deleteCategory, getCategories, updateCategory } from ".
 const router = Router();
 
 router.post("/", categoryValidator, checkValidation, createCategory)
-router.get("/", categoryValidator, checkValidation, getCategories)
+router.get("/", getCategories)
 router.put("/:id", updateCategory)
 router.delete("/:id", deleteCategory)
 
