@@ -1,3 +1,4 @@
+import { CustomError } from "../utils/customError.util.js";
 import { compareHashPassword, hashPassword } from "../utils/hashPassword.util.js";
 import { createJwtToken } from "../utils/jwtToken.util.js";
 import { prisma } from "../utils/prisma.util.js";
@@ -11,11 +12,7 @@ export const register = async(req,res) => {
         }
     });
     if (existingUser){
-        return res.status(409).json({
-            success: false,
-            data: null,
-            message: "user already exists"
-        })
+        throw new CustomError("User already exists", 409);
     }
     const hashedPassword = await hashPassword(password);
 
@@ -49,24 +46,16 @@ export const login = async(req,res) => {
     });
 
     if (!user) {
-        return res.status(401).json({
-            success : false,
-            data : null,
-            message : "Invalid email or password"
-        })
-    };
+        throw new CustomError("Invalid email or password", 401);
+    }
 
     const isPasswordValid = await compareHashPassword(
         password,
         user.password
     );
 
-    if (!isPasswordValid){
-        return res.status(401).json({
-            success : false,
-            data : null,
-            message : "Invalid email or password"
-        })
+    if (!isPasswordValid) {
+        throw new CustomError("Invalid email or password", 401);
     }
 
     const token = createJwtToken({

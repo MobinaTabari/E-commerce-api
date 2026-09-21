@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import authRouter from "./routes/auth.routes.js";
+import categoryRouter from "./routes/category.routes.js"
 import { prisma } from "./utils/prisma.util.js";
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 
@@ -15,6 +16,8 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 
 app.use("/api/auth", authRouter);
+
+app.use("/api/categories",categoryRouter)
 
 app.use(errorHandler)
 
