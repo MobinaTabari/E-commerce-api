@@ -38,7 +38,7 @@ model Product {
   name        String
   price       Int
   stock       Int
-  image       String
+  image       String?
   category_id String
   category    Category   @relation(fields: [category_id], references: [id])
   favorites   Favorite[]
