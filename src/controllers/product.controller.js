@@ -1,5 +1,6 @@
 import { CustomError } from "../utils/customError.util.js";
 import { prisma } from "../utils/prisma.util.js";
+import fs from "fs/promises";
 
 export const createProduct = async (req,res) => {
     const {name,price, stock, category_id} = req.body;
@@ -14,12 +15,21 @@ export const createProduct = async (req,res) => {
     }
 
     const product = await prisma.product.create({
-        data : {
+        data: {
             name,
-            price,
-            stock,
+            price: Number(price),
+            stock: Number(stock),
             category_id
         }
+    });
+
+    const images = req.files.map((file) => ({
+        path: file.path,
+        product_id: product.id
+    }));
+
+    await prisma.productImage.createMany({
+        data: images
     });
 
     return res.status(201).json({
@@ -75,7 +85,10 @@ export const getProducts = async (req,res) => {
     }
 
     const products = await prisma.product.findMany({
-        where
+        where,
+        include: {
+            images: true
+        }
     });
 
     if (products.length === 0){
@@ -95,6 +108,9 @@ export const getProductById = async (req, res) => {
     const product = await prisma.product.findUnique({
         where : {
             id
+        },
+        include : {
+            images : true
         }
     });
 
@@ -169,11 +185,18 @@ export const deleteProduct = async (req,res) => {
     const product = await prisma.product.findUnique({
         where : {
             id
+        },
+        include: {
+            images: true
         }
     });
 
     if(!product){
         throw new CustomError("Product not found", 404);
+    }
+
+    for (const image of product.images) {
+        await fs.unlink(image.path);
     }
 
     const deletedProduct = await prisma.product.delete({

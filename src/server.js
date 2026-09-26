@@ -14,6 +14,8 @@ const port = process.env.PORT;
 
 app.use(express.json());
 
+app.use("/uploads", express.static("uploads"));
+
 app.use("/api/auth", authRouter);
 
 app.use("/api/auth", authRouter);
