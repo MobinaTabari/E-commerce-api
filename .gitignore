@@ -17,3 +17,5 @@ node_modules/
 skills-lock.json
 
 /dev.db
+
+uploads/
