@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import authRouter from "./routes/auth.routes.js";
 import categoryRouter from "./routes/category.routes.js";
 import productRouter from "./routes/product.routes.js";
-import userRouter from "./routes/user.routes.js"
+import userRouter from "./routes/user.routes.js";
+import favoriteRouter from "./routes/favorite.routes.js";
 import { prisma } from "./utils/prisma.util.js";
 import { errorHandler } from "./middlewares/errorHandler.middleware.js";
 
@@ -26,6 +27,8 @@ app.use("/api/categories",categoryRouter);
 app.use("/api/products", productRouter);
 
 app.use("/api/users", userRouter)
+
+app.use("/api/favorites", favoriteRouter);
 
 app.use(errorHandler)
 
